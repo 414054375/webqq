@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>登录成功</title>
+    </head>
+    <script>
+		var ws = new WebSocket('ws://localhost:8080/soc');
+		ws.onmessage = function(event) {
+		    var table = document.getElementById('message');
+		    table.insertRow().insertCell().innerHTML = event.data;
+		};
+		function send(){
+			var obj = document.getElementById("content");
+			var output = "{{nickname}}" + " : "+ obj.value;
+			ws.send(output);
+			obj.value = '';
+			output='';
+		}
+	</script>
+    <body>
+    	<div>
+    		欢迎 {{nickname}} 用户登录
+    	</div>
+		<table id='message'></table>
+		<div>
+			<p>在下面的对话框中输入您要发送的信息</p>
+	        <input type="text" id="content">
+	        <br/>
+	        <button onclick="return send();">send</button>
+		</div>
+    </body>
+</html>
