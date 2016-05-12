@@ -14,3 +14,4 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
 
 	def on_message(self,data):
 		SocketHandler.send_to_all(data)
+		

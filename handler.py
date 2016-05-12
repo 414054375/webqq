@@ -23,6 +23,16 @@ class LoginCookieHandler(BaseHandler):
         a = db.select("select * from user where ID = ? and password = ?", id,password)
         if len(a)==1:
             self.set_current_id(id)
+            print id
+            print models.Check_Friend_Table(id)
+            m = models.New_Friend_Table(id)
+            db.update('drop table if exists %s' %  m.__table__ )
+            if models.Check_Friend_Table(id)==0:
+                m = models.New_Friend_Table(id)
+                print m.__table__
+                print type(m.__table__)
+                #"10000Friends"
+                db.update(m().__sql__())
             #print "self.get_secure_cookie(config._id) : ",self.get_secure_cookie(config._id)
             #print "self.get_current_id() : ",self.get_current_id()
             self.redirect("/live",permanent = True)#跳转到listHandler get
