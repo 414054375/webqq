@@ -25,8 +25,14 @@ def New_Friend_Table(id):#########################GTY神界护体###############
     return FriendTable
 
 def Check_Friend_Table(id):
-
     return db.select("select count(*) from sqlite_master where type='table' and name = ?","F"+str(id))[0]["count(*)"] 
+
+def Get_Friends(id):
+    a = db.select("select ID from %s" % 'F'+str(id))
+    id_list = []
+    for i in a:
+        id_list.append(i["ID"])
+    return id_list
 
 if __name__ == '__main__':
     import sys
@@ -41,7 +47,9 @@ if __name__ == '__main__':
         for m in L:
             db.update('drop table if exists %s' % m.__table__)
             db.update(m().__sql__())
-        a = UserTable(ID = 10000,password = "123456",nickname = u"龙傲天")
-        a.insert()
+        UserTable(ID = 10000,password = "123456",nickname = u"龙傲天").insert()
         UserTable(ID = 10001,password = "123456",nickname = u"龙傲天2").insert()
+        #插入好友列表
+        b = New_Friend_Table(10000)(ID = 10001,Status = "Y")
+        b.insert()
         #FriendTable(ID = 10001,Status = "Y").insert()

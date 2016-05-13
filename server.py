@@ -7,7 +7,7 @@ import random
 import config
 from lsqlite import db
 import models
-from handler import LoginHandler,RegisterHandler,LiveHandler
+from handler import LoginHandler,RegisterHandler,LiveHandler,LoginCookieHandler
 from server_socket import SocketHandler
 class Application(tornado.web.Application):
     def __init__(self):
@@ -16,6 +16,7 @@ class Application(tornado.web.Application):
             (r"/register",RegisterHandler),
             (r"/live",LiveHandler),
             (r"/soc",SocketHandler),
+            (r"/logout",LoginCookieHandler),
         ]
         settings = config.settings
         tornado.web.Application.__init__(self, handlers, **settings)

@@ -6,27 +6,62 @@
     <script>
 		var ws = new WebSocket('ws://localhost:8080/soc');
 		ws.onmessage = function(event) {
-		    var table = document.getElementById('message');
-		    table.insertRow().insertCell().innerHTML = event.data;
+	    	var table = document.getElementById('message');
+	    	table.insertRow().insertCell().innerHTML = event.data;
 		};
-		function send(){
+		function send(message){
+			ws.send(message);
+		};
+
+		function connect_friend(friend_id){
+			//console.log(friend_id); JS dubug
+			send("F"+String(friend_id));
+		};
+		function send_content_message(){
+			message = document.getElementById("content").value
+			send("C"+String(message))
+		}
+		function send_to_all(){
 			var obj = document.getElementById("content");
 			var output = "{{nickname}}" + " : "+ obj.value;
 			ws.send(output);
 			obj.value = '';
 			output='';
-		}
+		};
 	</script>
     <body>
     	<div>
     		欢迎 {{nickname}} 用户登录
     	</div>
-		<table id='message'></table>
+    	<br/>
+    	<br/>
+    	<table id="message"></table>
+		<br/>
+
 		<div>
 			<p>在下面的对话框中输入您要发送的信息</p>
 	        <input type="text" id="content">
 	        <br/>
-	        <button onclick="return send();">send</button>
+	        <button onclick="send_content_message();">发送消息</button>
 		</div>
+		<br/>
+
+		<div>
+			{% for a in friends%}
+				<button onclick="connect_friend({{a}})">{{a}}</button>
+				<br/>
+			{% end %}
+		</div>
+		<br/>
+
+		<div>
+			<button>添加好友</button>
+		</div>
+		<br/>
+
+		<form method="post" action="/logout">
+			<input type="submit" value="注销用户">
+		</form>
+
     </body>
 </html>
